@@ -1,10 +1,3 @@
-# Command Line Chat Bot
-
-This is a simple chat bot that uses the OpenAI apis to create a ChatGPT equivalent.
-
-You can watch a great video walkthrough [here](https://youtu.be/jQFhtFMDz1s).
-
-[![Walkthrough Video](https://img.youtube.com/vi/jQFhtFMDz1s/0.jpg)](https://youtu.be/jQFhtFMDz1s)
 
 # Setup
 
@@ -31,10 +24,6 @@ python -m venv venv
 venv\Scripts\activate.bat
 pip install -r requirements.txt
 ```
-
-# Configuration
-
-Copy `env.sample` to `.env` and add your OpenAI API key to the file.
 
 ```
 OPENAI_API_KEY=<<YOUR_API_KEY>>

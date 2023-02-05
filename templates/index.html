@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="initial-scale=1.0">
+    <link rel="stylesheet" href="https://raw.githubusercontent.com/Ahmed-Massoud/Login-and-sign-up-form/main/font.css">
+
+</head>
+
+<body>
+
+    <div id="container">
+     <h3 style="font-size:30px;margin-right:1000px;">
+     Welcome To
+ </h3>
+    <h2 style="font-size:50px;">
+        Her Health Advocate
+    </h2>
+
+        <br> <br>
+
+          <h3 style="font-size:30px;">
+     We're here for you & Your Health.
+    </h3>
+
+
+        <div class="main" id="main">
+
+
+        
+            <input type="checkbox" id="chk">
+            <div class="signup">
+                <form action="{{ url_for('signup') }}" method="post">
+                <label for="chk" class="sig">Sign up</label>
+                <div class="user-box">
+                    <input type="text" title="Enter Username" id="username" name="username" required autocomplete="off">
+                    <label id="usernameLabel">Username</label>
+                    <img src="https://raw.githubusercontent.com/Ahmed-Massoud/Login-and-sign-up-form/main/logo.svg" alt="Logo" class="logo-img" id="userIcon" />
+                    <i></i>
+                </div>
+                <div class="user-box">
+                    <input type="text" title="Enter email" id="email" name="email" required autocomplete="off">
+                    <label id="emailLabel">Email</label>
+                    <img src="https://raw.githubusercontent.com/Ahmed-Massoud/Login-and-sign-up-form/main/logo.svg" alt="Logo" class="logo-img" id="emailIcon">
+                </div>
+                <div class="user-box">
+                    <input type="password" title="Enter password" id="password" name="password" required autocomplete="off">
+                    <label id="passwordLabel">Password</label>
+                    <img src="https://raw.githubusercontent.com/Ahmed-Massoud/Login-and-sign-up-form/main/logo.svg" alt="Logo" class="logo-img" id="passIcon">
+                </div>
+                <button class="btn" id="button">Sign up</button>
+                <!-- <input type="submit" value="Sign up"> -->
+                </form>
+            </div>
+        
+            
+            <div class="login">
+                <form action = "/login" method = "post">
+                <label for="chk" class="log">Login</label>
+
+
+
+                <div class="user-box">
+
+                    <input type="text" title="Enter Username" id="username2" required>
+
+                    <label>Username</label>
+
+                </div>
+
+                <div class="user-box">
+
+                    <input type="password" title="Enter password" id="password2" required>
+
+                    <label>Password</label>
+
+                </div>
+                <button onclick="login()" id="button2">Login</button>
+                </form>
+            </div>
+
+        </div>
+      <!-- <script src="https://raw.githubusercontent.com/Ahmed-Massoud/Login-and-sign-up-form/main/sweetalert.min.js"></script> -->
+      <!-- <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script> -->
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+    // import swal from 'sweetalert2';
+
+    // let dataPro = [];
+    // if (localStorage.User != null) {
+    //     dataPro = JSON.parse(localStorage.User);
+    // } else {
+
+    //     let admin = {
+    //             Username:"admin",
+    //             Email:"ahmed14massoud2021@gmail.com",
+    //             Password: "admin142021",
+    //         };
+    //         dataPro.push(admin);
+    //         localStorage.setItem("User", JSON.stringify(dataPro))
+    // }
+
+
+
+
+    function totxt(e) {
+        e = e.value.trim();
+        return e;
+    }
+
+
+
+
+    // function validation(input, inputName, re, label) {
+
+    //     function Rfalse() {
+    //         input.style = "border-bottom:1px solid red;background-image: linear-gradient(0deg, rgba(255,0,0,.3) 0%, rgba(0,0,0,0) 30%);";
+
+    //     }
+
+    //     function Rtrue() {
+    //         input.style = "border-bottom:1px solid green;background-image: linear-gradient(0deg, rgba(0,255,0,.3) 0%, rgba(0,0,0,0) 30%);";
+    //     }
+
+    //     function content() {
+    //         swal("Noticeable", `The ${inputName} must Contains only letters and numbers for easy memorization`, "error");
+    //     }
+
+    //     function number(less, more) {
+    //         if (totxt(input).length < less || totxt(input).length > more) {
+    //             swal("Noticeable", `the ${inputName} Not less than ${less} and not more than ${more}.`, "error");
+
+    //         } else {
+    //             content()
+    //         }
+    //     }
+
+    //     function empty() {
+    //         swal("Noticeable", `You should not leave the  ${inputName} field blank .`, "error");
+
+    //     }
+
+    //     function incorrect() {
+    //         swal("Noticeable", `The ${inputName} is in correct.`, "error");
+    //     }
+
+    //     if (re.test(totxt(input))) {
+
+
+
+    //         if (inputName == "username") {
+
+    //             for (let i = 0; i < dataPro.length; i++) {
+
+    //              if (dataPro[i].Username == totxt(username)) {
+
+
+    //                     swal("Noticeable", "The account has been created, please choose another", "error");
+
+
+    //                     Rfalse();
+    //                     return false;
+
+
+    //                 } else {
+
+    //                     if (dataPro.length - i == 1) {
+
+    //                         Rtrue();
+    //                         return true;
+
+
+    //               }
+    //             }
+    //             }
+
+
+    //         } else {
+
+    //             Rtrue();
+    //             return true;
+    //         }
+
+
+    //     } else {
+
+
+    //         if (totxt(input) == "") {
+    //             empty();
+    //         } else {
+
+
+
+
+    //             if (inputName == "username") {
+    //                 number(5, 15)
+    //             } else if (inputName == "password") {
+    //                 number(7, 14)
+    //             } else {
+    //                 if (inputName == "email") {
+    //                     incorrect()
+    //                 } else {
+    //                     content()
+    //                 }
+
+    //             }
+
+
+
+
+    //         }
+
+    //         Rfalse();
+    //         return false
+    //     }
+    // }
+
+
+
+    // const btnEl = document.querySelector('.btn')
+    // function check() {
+
+        // let usernameRe = /^[A-Za-z0-9]{5,15}$/;
+        // let emailRe = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+        // let passwordRe = /^[A-Za-z0-9]{7,14}$/;
+        // let username = document.getElementById("username");
+        // let email = document.getElementById("email");
+        // let password = document.getElementById("password");
+        // let button = document.getElementById("button");
+        // let usernameLabel = document.getElementById("usernameLabel");
+        // let emailLabel = document.getElementById("emailLabel");
+        // let passwordLabel = document.getElementById("passwordLabel");
+
+        // let passwordCorrect = validation(password, "password", passwordRe);
+        // let emailCorrect = validation(email, "email", emailRe);
+        // let usernameCorrect = validation(username, "username", usernameRe);
+        // console.log(usernameCorrect);
+        // console.log(emailCorrect);
+        // console.log(passwordCorrect);
+        // console.log("###########");
+
+        // if (usernameCorrect == true && emailCorrect == true && passwordCorrect == true) {
+    //     let newUser = {
+    //         name: username,
+    //         email: email,
+    //         password: password,
+    //     };
+    //     console.log(newUser);
+    //     // dataPro.push(newUser);
+    //     // localStorage.setItem("User", JSON.stringify(dataPro))
+
+    //     fetch('http://127.0.0.1:8000/signup', {
+    //         method: 'POST',
+    //         body: JSON.stringify(newUser),
+    //         mode: 'cors',
+    //         headers: {
+    //             Accept: "application/json, text/plain, */*", 
+    //             "Content-Type": "application/json",
+    //         },
+    //     })
+    //     .then((response) => response.json())
+    //     .then((result) => {
+    //         if(result.message === "SUCCESS"){
+    //         alert("You are logged in.");
+    //         this.goToMain();
+    //         } else {
+    //             alert("Please check your login information.");
+    //         }
+    //     })
+
+    //     username.value = "";
+    //     email.value = "";
+    //     password.value = "";
+
+    //     username.style = "border-bottom:1px solid #fff;background-image: rgba(0,0,0,0);";
+
+    //     email.style = "border-bottom:1px solid #fff;background-image: rgba(0,0,0,0);";
+
+    //     password.style = "border-bottom:1px solid #fff;background-image: rgba(0,0,0,0);";
+
+
+    //     // swal("Account creation succeeded", "The account has been created, please login", "success");
+
+    //     let chk = document.getElementById("chk");
+    //     chk.checked = true;
+    //     console.log("added")
+
+    //     // }
+
+    // }
+
+    // btnEl.addEventListener('click', check);
+
+    let userIcon = document.getElementById("userIcon");
+    let emailIcon = document.getElementById("emailIcon");
+    let passIcon = document.getElementById("passIcon");
+
+
+    userIcon.onclick = function() {
+
+        swal(`Username must be
+            # Contains only letters and numbers for easy memorization.
+            # Not less than 5 and not more than 15.
+            #Not be already used before.`);
+    }
+    emailIcon.onclick = function() {
+
+        swal(`The email must be valid to communicate with you in case of sending a confirmation code.`);
+    }
+    passIcon.onclick = function() {
+
+        swal(`Password must be
+            # Contains only letters and numbers for easy memorization.
+            # Not less than 7 and not more than 14. `);
+    }
+
+
+
+
+    function login() {
+        let username = document.getElementById("username2");
+        let email = document.getElementById("emailLabel");
+        let password = document.getElementById("password2");
+        let button = document.getElementById("button2");
+
+        fetch('http://127.0.0.1:8000/login', {
+            method: 'POST',
+            body: JSON.stringify({ name: username,  email: email, password:password}),
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        })
+        .then(swal("Login succeeded", "", "success"))
+        .catch((error) => {
+            swal("Login failed", "We can't find your username", "error");
+        })
+
+        // for (let i = 0; i < dataPro.length; i++) {
+        //     if (dataPro[i].Username == totxt(username)) {
+        //         if (dataPro[i].Password == totxt(password)) {
+        //             swal("Login succeeded", "", "success");
+        //         } else {
+        //             swal("Incorrect Passowrd", "Please check your passowrd", "error");
+        //             break;
+        //         }
+        //     } else {
+        //         if (dataPro.length - i == 1) {
+        //             swal("Login failed", "We can't find your username", "error");
+        //         }
+        //     }
+        // }
+    }
+
+    </script>
+
+
+</body>
+</html>

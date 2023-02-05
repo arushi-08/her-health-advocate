@@ -7,7 +7,7 @@ from colorama import Fore, Back, Style
 load_dotenv()
 
 # configure OpenAI
-openai.api_key = os.getenv("OPENAI_API_KEY", "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")
+openai.api_key = os.getenv("OPENAI_API_KEY", "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")
 
 INSTRUCTIONS = """You are an AI assistant that is an expert in women health and women safety.
 You know about health, lifestyle, hygiene and safety.

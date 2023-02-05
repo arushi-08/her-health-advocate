@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='stylediary.css') }}">
+<head>
+    <meta charset="UTF-8">
+    <title>Chatbot</title>
+    <style>
+      a:link {
+         color: white;
+         background-color: transparent;
+         text-decoration: none;
+         font-size: 50px;
+         font-family: Avenir;
+      }
+   </style>
+</head>
+<body>
+
+
+<section>
+
+  <nav class="nav1">
+
+    <ul>
+      <h1 style="font-size:50px;color:white;font-family: Avenir"> HHA </h1>
+
+      <li><a href="home">Chatbot</a></li>
+    <li><a href="diary">Diary</a></li>
+    <li><a href="findothers">Find Others</a></li>
+  </ul>
+
+  <ul> <button type="button"  style="height:40px;width:400px;margin-top:600px;font-family: Aveni">Logout</button>
+  </ul>
+  </nav>
+  <center>
+
+
+<div>
+<br>
+      <h3 Style="font-size:20px; font-family: Avenir; color:#7A706E; font-style: italic;"> Each new day is a blank page in the diary of your life. </h3> <br>
+        <h3 Style="font-size:20px; font-family: Avenir; color:#7A706E; font-style: italic;">  The secret of success is in turning that diary into the best story you possibly can </h3>
+      <div class="box">
+         </div>
+         <p style="font-family: Avenir;font-size: 30; padding-top: 40px;">Date of Entry</p>
+        <input type="date" placeholder="DD/MM/YY" name="date" style="font-family: Avenir;"></input>
+        <p style="font-family: Avenir;font-size: 30;">Mood Notes</p>
+            <textarea type="text" name="New Entry" placeholder="Share your mood" cols="10" rows="1" style="height: auto; color: #999; font-weight:400;
+            font-size:30px;
+            font-family: Avenir; padding:30px;"></textarea>
+    <p style="font-family: Avenir;font-size: 30; padding-top: 10px;">Other Thoughts</p>
+             <textarea type="text" name="New Entry" placeholder="Share your thoughts here" cols="10" rows="5" style="height: auto; color: #999; font-weight:400;
+             font-size:30px;
+             font-family: Avenir; padding:30px;"></textarea>
+     <div class="add-btn">
+            <button type="button" class="button" style="font-family: Avenir;">Save</button>
+            <button type="button" class="button" style="font-family: Avenir;">Discard</button>
+            <button type="button" class="button" style="font-family: Avenir;"> Cancel</button>
+         </div>
+         </div>
+         <br>
+
+      </div>
+  </center> </div>
+</section>
+
+</center>
+</body>
+</html>

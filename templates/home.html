@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" href="{{ url_for('static', filename='stylehome.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<head>
+    <meta charset="UTF-8">
+    <title>Chatbot</title>
+    <style>
+        a:link {
+           color: white;
+           background-color: transparent;
+           text-decoration: none;
+           font-size: 50px;
+           font-family: Avenir;
+        }
+     </style>
+
+</head>
+<body>
+
+
+<section>
+        <nav>
+
+            <ul>
+                <h1 style="font-size:50px;color:white;font-family: Avenir"> HHA </h1>
+        
+                <li><a href="home">Chatbot</a></li>
+              <li><a href="diary">Diary</a></li>
+              <li><a href="findothers">Find Others</a></li>
+            </ul>
+        
+            <ul> <button type="button"  style="height:40px;width:400px;margin-top:600px;font-family: Aveni">Logout</button>
+            </ul>
+          </nav>
+    <br>
+        <center>
+            <p style="font-size:25px;font-family: Avenir;margin-top: 50px;"> You've accomplished a lot today. Let us handle the rest. </p>
+            <p style="font-size:25px;font-family: Avenir;margin-top: 70px;"> Click on the bottom right button and get started</p>
+        </center>
+    
+
+
+
+
+
+</section>
+
+
+    <div class="chatbox">
+        <div class="chatbox__support">
+            <div class="chatbox__header">
+                <div class="chatbox__image--header">
+                    <img src="https://img.icons8.com/color/48/000000/circled-user-female-skin-type-5--v1.png" alt="image">
+                </div>
+                <div class="chatbox__content--header">
+                    <h4 class="chatbox__heading--header">Chat support</h4>
+                    <p class="chatbox__description--header">Hi. My name is Maya. How can I help you?</p>
+                </div>
+            </div>
+            <div class="chatbox__messages">
+                <div></div>
+            </div>
+            <div class="chatbox__footer">
+                <input type="text" placeholder="Write a message...">
+                <button class="chatbox__send--footer send__button">Send</button>
+<!--                <button class="chatbox__send--footer send__button" id="start">Start</button>-->
+<!--                <button class="chatbox__send--footer send__button" id="stop">Stop</button>-->
+<!--                <p id="status" class="lead mt-3 text-light" style="display: none">Listenting ...</p>-->
+            </div>
+        </div>
+        <div class="chatbox__button">
+            <button style="size:70px;"><img src="{{ url_for('static', filename='images/chatbot.jpeg') }}" width="100" height="100"/></button>
+        </div>
+    </div>
+</div>
+
+    <!-- <script>
+        $SCRIPT_ROOT = {{ request.script_root|tojson }};
+    </script> -->
+    <script type="text/javascript" src="{{ url_for('static', filename='app.js') }}"></script>
+
+</body>
+</html>

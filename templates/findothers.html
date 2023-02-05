@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" href="{{ url_for('static', filename='stylehome.css') }}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Chatbot</title>
+    <style>
+
+        .btn {
+  background-color: DodgerBlue;
+  border: none;
+  color: white;
+  padding: 12px 16px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Darker background on mouse-over */
+.btn:hover {
+  background-color: coralred;
+}
+
+
+.button {
+  background-color: lightcoral;
+  border: none;
+  color: white;
+  padding: 50px 70px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  margin: 70px 30px;
+  cursor: pointer;
+  font-family: Avenir;
+}
+a:link {
+         color: white;
+         background-color: transparent;
+         text-decoration: none;
+         font-size: 50px;
+         font-family: Avenir;
+      }
+      h2 {
+        width: 900px;
+      }
+    </style>
+</head>
+<body>
+
+
+<section>
+
+  <nav>
+
+    <ul>
+      <h1 style="font-size:50px;color:white;font-family: Avenir"> HHA </h1>
+
+      <li><a href="home">Chatbot</a></li>
+    <li><a href="diary">Diary</a></li>
+    <li><a href="findothers">Find Others</a></li>
+  </ul>
+
+  <ul> <button type="button"  style="height:40px;width:400px;margin-top:600px;font-family: Aveni">Logout</button>
+  </ul>
+  </nav>
+<br>
+<center>
+    <h1 Style="font-size:20px; font-family: Avenir; color:#7A706E; font-style: italic;"> Communities Near You </h1> <br>
+    <h2 Style="font-size:20px; font-family: Avenir; color:#7A706E; font-style: italic; padding-left: 450px;"> We come alongside individuals of all ages to help them gain the skills and service they need to remain in their homes and communities.</h2>
+     <div class="add-btn">
+            <button type="button" class="button">Independent Living Skills Training</button>
+            <button type="button" class="button">Peer Support</button>
+            <button type="button" class="button"> Youth Services</button>
+          <button type="button" class="button"> Advocacy </button>
+            <button type="button" class="button"> Motherhood Support </button>
+
+         </div>
+         </div>
+</center>
+
+
+</section>
+
+
+</body>
+</html>

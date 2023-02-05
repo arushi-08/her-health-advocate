@@ -1,10 +1,6 @@
 # Command Line Chat Bot
 
-This is a simple chat bot that uses the OpenAI apis to create a ChatGPT equivalent.
-
-You can watch a great video walkthrough [here](https://youtu.be/jQFhtFMDz1s).
-
-[![Walkthrough Video](https://img.youtube.com/vi/jQFhtFMDz1s/0.jpg)](https://youtu.be/jQFhtFMDz1s)
+This is an application that empowers women in advocating for their health, offering tailored guidance in an easy-to-understand format, and enhancing access to pain relief to enhance their overall wellbeing. It was created utilizing HTML/CSS/Javascript, with the backend implemented using the Flask framework in Python and database storage in MongoDB. User authentication was established with JWT, and an intelligent taskbot feature was developed using the OpenAI API.
 
 # Setup
 

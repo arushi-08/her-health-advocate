@@ -68,3 +68,5 @@ python main.py
 venv\Scripts\activate.bat
 python main.py
 ```
+
+View the application on `http:\\127.0.0.1:8000`

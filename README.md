@@ -1,4 +1,4 @@
-# Command Line Chat Bot
+# Her Health Advocate
 
 This is an application that empowers women in advocating for their health, offering tailored guidance in an easy-to-understand format, and enhancing access to pain relief to enhance their overall wellbeing. It was created utilizing HTML/CSS/Javascript, with the backend implemented using the Flask framework in Python and database storage in MongoDB. User authentication was established with JWT, and an intelligent taskbot feature was developed using the OpenAI API.
 

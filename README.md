@@ -1,72 +1,46 @@
 # Her Health Advocate
 
-This is an application that empowers women in advocating for their health, offering tailored guidance in an easy-to-understand format, and enhancing access to pain relief to enhance their overall wellbeing. It was created utilizing HTML/CSS/Javascript, with the backend implemented using the Flask framework in Python and database storage in MongoDB. User authentication was established with JWT, and an intelligent taskbot feature was developed using the OpenAI API.
+> Built at **SheInnovates 2023** — the original hackathon prototype, cleaned up so it still runs today. The pitch deck is in [`SheInnovates 2023 - Her Health Advocate.pptx`](SheInnovates%202023%20-%20Her%20Health%20Advocate.pptx).
 
-# Setup
+Her Health Advocate empowers women to advocate for their own health. It offers tailored guidance in an easy-to-understand format and makes wellbeing support more accessible.
 
-Make sure you have python3 installed:
+## Features
 
-```
-python3 --version
-```
+- **Maya, an AI health chat assistant** — answers questions about health, lifestyle, hygiene, and safety (OpenAI API, with moderation on every message)
+- **Daily diary** — log mood, sleep hours, and notes, with emotion tracking from diary text (`text2emotion`)
+- **User accounts** — signup/login with hashed passwords and JWT sessions
+- **Weather-aware wellbeing** — pulls local weather for the user's city (OpenWeatherMap)
+- **Find Others** — connect with other women in your community
 
-Create a virtual environment and install the dependencies:
+## Tech stack
 
-### Linux/Mac:
+HTML/CSS/JavaScript frontend, Flask (Python) backend, MongoDB for storage, JWT for authentication, and the OpenAI API for the chat assistant.
 
-```
+## Setup
+
+Requires Python 3.10+ and a MongoDB instance on `mongodb://127.0.0.1:27017` (only needed for accounts/diary — the chatbot works without it).
+
+```bash
 python3 -m venv venv
-. ./venv/bin/activate
+. ./venv/bin/activate        # Windows: venv\Scripts\activate.bat
 pip install -r requirements.txt
 ```
 
-### Windows:
+## Configuration
+
+Copy `env.sample` to `.env` and fill in your keys:
 
 ```
-python -m venv venv
-venv\Scripts\activate.bat
-pip install -r requirements.txt
+OPENAI_API_KEY=your-openai-api-key          # required for the chatbot
+SECRET_KEY=change-me-to-a-random-string     # used to sign JWTs
+OPENWEATHER_API_KEY=your-openweathermap-key # optional; demo data is used if unset
 ```
 
-# Configuration
+## Running
 
-Copy `env.sample` to `.env` and add your OpenAI API key to the file.
-
-```
-OPENAI_API_KEY=<<YOUR_API_KEY>>
-```
-
-Edit `main.py` and replace `<<PUT THE PROMPT HERE>>` with your prompt:
-
-e.g. Create a simple AI cocktail assistant
-
-```
-INSTRUCTIONS = """You are an AI assistant that is an expert in women health and women safety.
-You know about health, lifestyle, hygiene and safety.
-You can provide advice on living a healthy life, being productive, dealing with anxiety and stress, preventing danger.
-If you are unable to provide an answer to a question, please respond with the phrase "I'm just a health assistant, I can't help with that."
-Please aim to be as helpful, creative, and friendly as possible in all of your responses.
-Do not use any external URLs in your answers. Do not refer to any blogs in your answers.
-Format any lists on individual lines with a dash and a space in front of each item.
-"""
-```
-
-# Running
-
-To run just do the following:
-
-### Linux/Mac:
-
-```
+```bash
 . ./venv/bin/activate
 python main.py
 ```
 
-### Windows:
-
-```
-venv\Scripts\activate.bat
-python main.py
-```
-
-View the application on `http:\\127.0.0.1:8000`
+Then open http://127.0.0.1:8000 — sign up, and chat with Maya from the bubble in the bottom-right corner.

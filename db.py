@@ -12,7 +12,6 @@ connect(
 
 
 class User(db.Document):
-    # id = db.IntField()
     public_id = db.StringField()
     name = db.StringField()
     email = db.StringField()

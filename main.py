@@ -1,20 +1,27 @@
-import io
-import requests
-from flask import Flask, render_template, jsonify, request, make_response, redirect, url_for, Response
-from flask_cors import CORS
-import uuid # for public id
-from  werkzeug.security import generate_password_hash, check_password_hash
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from matplotlib.figure import Figure
-# imports for PyJWT authentication
-import jwt
+import os
+import uuid  # for public id
 from datetime import datetime, timedelta
 from functools import wraps
-import text2emotion as te
+
+import jwt
+import requests
+from dotenv import load_dotenv
+from flask import (
+    Flask,
+    jsonify,
+    make_response,
+    redirect,
+    render_template,
+    request,
+    url_for,
+)
+from flask_cors import CORS
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from chatbot import get_chatbot
-from db import User, Diary, Weather
+from db import Diary, User, Weather
+
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
@@ -22,38 +29,36 @@ app.config['MONGODB_SETTINGS'] = {
     'db': "health_app",
     'host': "mongodb://127.0.0.1:27017/"
 }
-app.config['SECRET_KEY'] = "123"
+app.config['SECRET_KEY'] = os.getenv("SECRET_KEY", "dev-only-secret")
 
 
 @app.route("/")
 def index_get():
     return render_template("index.html")
-    
-    
+
+
 @app.route("/api/talk", methods=['POST'])
-def index():
+def talk():
     user_input = request.json["message"]
     response = get_chatbot(user_input)
-    print(response)
     return jsonify({"answer": response})
 
-# Route for handling the login page logic
+
+# Route for the chatbot home page
 @app.route('/home', methods=['GET', 'POST'])
 def home():
-    error=None
+    return render_template('home.html', error=None)
 
-    return render_template('home.html', error=error)
 
-# Route for handling the main home page logic
+# Route for the main home page
 @app.route('/mainhome', methods=['GET', 'POST'])
 def mainhome():
-    error=None
+    return render_template('mainhome.html', error=None)
 
-    return render_template('mainhome.html', error=error)
 
-  
-@app.route("/track_emotion", methods =['POST'])
+@app.route("/track_emotion", methods=['POST'])
 def get_emotion_from_text():
+    import text2emotion as te
     text = request.json["text"]
     emotions = te.get_emotion(text)
     return jsonify({"answer": emotions})
@@ -63,225 +68,173 @@ def get_emotion_from_text():
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        token = None
-        # jwt is passed in the request header
-        if 'x-access-token' in request.headers:
-            token = request.headers['x-access-token']
-        # return 401 if token is not passed
+        token = request.headers.get('x-access-token') or request.cookies.get('token')
         if not token:
-            return jsonify({'message' : 'Token is missing !!'}), 401
-  
+            return jsonify({'message': 'Token is missing !!'}), 401
+
         try:
-            # decoding the payload to fetch the stored details
-            data = jwt.decode(token, app.config['SECRET_KEY'])
-            current_user = User.query\
-                .filter_by(public_id = data['public_id'])\
-                .first()
-        except:
-            return jsonify({
-                'message' : 'Token is invalid !!'
-            }), 401
-        # returns the current logged in users contex to the routes
-        return  f(current_user, *args, **kwargs)
-  
+            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
+            current_user = User.objects(public_id=data['public_id']).first()
+        except Exception:
+            return jsonify({'message': 'Token is invalid !!'}), 401
+        # pass the current logged in user's context to the route
+        return f(current_user, *args, **kwargs)
+
     return decorated
-  
-# route for logging user in
-@app.route("/login", methods =['POST'])
+
+
+# route for logging a user in
+@app.route("/login", methods=['POST'])
 def login():
-    # creates dictionary of form data
-    auth = request.form
-  
-    if not auth or not auth.get('username2') or not auth.get('password2'):
-        # returns 401 if any email or / and password is missing
+    username = request.form.get('username2')
+    password = request.form.get('password2')
+
+    if not username or not password:
         return make_response(
-            'Could not verify',
-            401,
-            {'WWW-Authenticate' : 'Basic realm ="Login required !!"'}
+            'Could not verify', 401,
+            {'WWW-Authenticate': 'Basic realm ="Login required !!"'}
         )
-  
-    user = User.objects(email = auth.get('email')).first()
-  
+
+    user = User.objects(name=username).first()
     if not user:
-        # returns 401 if user does not exist
         return make_response(
-            'Could not verify',
-            401,
-            {'WWW-Authenticate' : 'Basic realm ="User does not exist !!"'}
+            'Could not verify', 401,
+            {'WWW-Authenticate': 'Basic realm ="User does not exist !!"'}
         )
-    print(user.password)
-    print(auth.get('password'))
-    if check_password_hash(user.password, auth.get('password')):
-        # generates the JWT Token
+
+    if check_password_hash(user.password, password):
         token = jwt.encode({
             'public_id': user.public_id,
-            'exp' : datetime.utcnow() + timedelta(minutes = 30)
-        }, app.config['SECRET_KEY'])
-  
-        return make_response(jsonify({'token' : token.decode('UTF-8')}), 201)
-    # returns 403 if password is wrong
+            'exp': datetime.utcnow() + timedelta(minutes=30)
+        }, app.config['SECRET_KEY'], algorithm="HS256")
+
+        response = make_response(redirect(url_for('home')))
+        response.set_cookie('token', token, httponly=True)
+        return response
+
     return make_response(
-        'Could not verify',
-        403,
-        {'WWW-Authenticate' : 'Basic realm ="Wrong Password !!"'}
+        'Could not verify', 403,
+        {'WWW-Authenticate': 'Basic realm ="Wrong Password !!"'}
     )
-  
+
+
 # signup route
-@app.route("/signup", methods =['POST'])
+@app.route("/signup", methods=['POST'])
 def signup():
-    # creates a dictionary of the form data
-    # print(request)
-    # gets name, email and password
-    name, email = request.form["username"], request.form["email"]
+    name = request.form["username"]
+    email = request.form["email"]
     password = request.form["password"]
-    print('name',name)
-    print('email',email)
-    print('password',password)
-  
-    # checking for existing user
-    user = User.objects(email = email).first()
-    
+
+    # check for an existing user
+    user = User.objects(email=email).first()
     if not user:
-        # database ORM object
         User(
-            public_id = str(uuid.uuid4()),
-            name = name,
-            email = email,
-            password = generate_password_hash(password)
+            public_id=str(uuid.uuid4()),
+            name=name,
+            email=email,
+            password=generate_password_hash(password)
         ).save()
-  
         return redirect(url_for('home'))
-    else:
-        # returns 202 if user already exists
-        return make_response('User already exists. Please Log in.', 202)
+
+    return make_response('User already exists. Please Log in.', 202)
 
 
-@app.route("/user_profile", methods =['POST'])
+@app.route("/user_profile", methods=['POST'])
 def fill_user_profile():
     name = request.form["name"]
-    age = int(request.form["age"])
-    city = request.form["city"]
-    state = request.form["state"]
-    country = request.form["country"]
     User.objects(name=name).update(
-        age=age,
-        city=city,
-        state=state,
-        country=country
+        age=int(request.form["age"]),
+        city=request.form["city"],
+        state=request.form["state"],
+        country=request.form["country"]
     )
     return jsonify({
         "state": "SUCCESS",
         "status": "Profile completed"
-        })
+    })
 
 
-# Route for handling the main home page logic
 @app.route('/diary', methods=['GET', 'POST'])
 def diary():
-    
     return render_template('diary.html')
 
-# Route for handling the main home page logic
+
 @app.route('/findothers', methods=['GET', 'POST'])
 def findothers():
-    error=None
-    return render_template('findothers.html', error=error)
+    return render_template('findothers.html', error=None)
+
 
 @app.route('/diary/save', methods=['POST'])
 def save_note():
-    name = request.form["name"]
-    mood = request.form["mood"]
-    sleep_hours = request.form["sleep"]
-    note = request.form["note"]
     Diary(
-        name=name,
+        name=request.form["name"],
         date=datetime.now(),
-        mood=mood,
-        sleep=sleep_hours,
-        note=note
+        mood=request.form["mood"],
+        sleep=request.form["sleep"],
+        note=request.form["note"]
     ).save()
-
     return {
         "state": "Success",
         "status": "Note saved"
-        }
+    }
 
 
 @app.route('/diary/num_logged_days', methods=['GET'])
 def get_num_logged_days():
-    name = request.form["name"]
+    name = request.args["name"]
     num_records = Diary.objects(name=name).count()
     return {
         "state": "Success",
         "status": num_records
-        }
+    }
 
 
 def trigger_weather_api(city):
-    # Enter your API key here
-    api_key = "aa627c9d7a56918d5e7ef50d37e44f28"
-    base_url = "http://api.openweathermap.org/data/2.5/weather?"
-    complete_url = base_url + "appid=" + api_key + "&q=" + city
-    requests.get(complete_url).json()
-    
+    api_key = os.getenv("OPENWEATHER_API_KEY")
+    if not api_key:
+        return None
+    url = f"http://api.openweathermap.org/data/2.5/weather?appid={api_key}&q={city}"
+    return requests.get(url).json()
+
 
 @app.route('/get_weather_report', methods=['GET'])
 def get_weather_report():
-    name = request.form["name"]
+    name = request.args["name"]
     city = User.objects.get(name=name).city
-    print(city)
-    # response = trigger_weather_api(city)
-    response = {"cod": "200"}
-    print(response)
-    if response["cod"] == "404":
+
+    response = trigger_weather_api(city)
+    if response is None:
+        # no API key configured: fall back to canned demo data
+        Weather(
+            city=city,
+            date=datetime.now(),
+            temperature="23",
+            pressure="30",
+            humidity="73",
+            weather="mostly cloudy",
+        ).save()
+    elif response.get("cod") == "404":
         return {
             "state": "FAILURE",
             "status_code": "404",
             "message": "Failed to get weather report of your city"
         }
-    
-    Weather(
-        city=city,
-        date=datetime.now(),
-        temperature="23",
-        pressure="30",
-        humidity="73",
-        weather="mostly cloudy",
-    ).save()
+    else:
+        main_details = response["main"]
+        Weather(
+            city=city,
+            date=datetime.now(),
+            temperature=str(main_details["temp"]),
+            pressure=str(main_details["pressure"]),
+            humidity=str(main_details["humidity"]),
+            weather=response["weather"][0]["description"],
+        ).save()
 
-    # main_details = response["main"]
-    # Weather(
-    #     city=city,
-    #     date=datetime.now(),
-    #     temperature=main_details["temp"],
-    #     pressure=main_details["pressure"],
-    #     humidity=main_details["humidity"],
-    #     weather=main_details["weather"],
-    # ).save()
     return jsonify({
         "state": "SUCCESS",
         "status": "Weather report saved"
-        })
-
-
-# def report_sleep_chart():
-#     # name = request.form["name"]
-#     name = "Arushi"
-#     date = datetime.now() - timedelta(7)
-#     records = Diary.objects(name=name, date__gte=date)
-#     sleep_hours = [r.sleep for r in records]
-#     date_list = [datetime.now() - timedelta(days=x) for x in range(7)]
-#     plt.plot(date_list, sleep_hours)
-
-
-# @app.route('/plot.png')
-# def plot_png():
-#     fig = report_sleep_chart()
-#     output = io.BytesIO()
-#     FigureCanvas(fig).print_png(output)
-#     return Response(output.getvalue(), mimetype='image/png')
+    })
 
 
 if __name__ == "__main__":
-#    main()
     app.run(host="127.0.0.1", port=8000, debug=True)

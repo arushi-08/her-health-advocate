@@ -1,6 +1,8 @@
 # Her Health Advocate
 
 > Built at **SheInnovates 2023** — the original hackathon prototype, cleaned up so it still runs today. The pitch deck is in [`SheInnovates 2023 - Her Health Advocate.pptx`](SheInnovates%202023%20-%20Her%20Health%20Advocate.pptx).
+>
+> This prototype was the starting point for **Herada**. It is preserved here as-is to show where the idea began.
 
 Her Health Advocate empowers women to advocate for their own health. It offers tailored guidance in an easy-to-understand format and makes wellbeing support more accessible.
 
